@@ -109,14 +109,14 @@ pub(crate) fn phase_shift_kernel_one_window<F: Float>(
     // The following code allow to ignore the batch index and assume only one window
     let input_re_layout = BatchSignalLayout::new(input_re, window_index);
     let input_im_layout = BatchSignalLayout::new(input_im, window_index);
-    let output_re_layout = BatchSignalLayout::new(input_im, window_index);
+    let output_re_layout = BatchSignalLayout::new(input_re, window_index);
     let output_im_layout = BatchSignalLayout::new(input_im, window_index);
     let input_re_view = input_re.view(input_re_layout);
     let input_im_view = input_im.view(input_im_layout);
     let mut output_re_view = output_re.view_mut(output_re_layout);
     let mut output_im_view = output_im.view_mut(output_im_layout);
 
-    for k in 0..10 * num_freq_bins {
+    for k in 0..num_freq_bins {
 
         // Warning: if line size > 1, this will duplicate the same k, while we would want something like [x, x+1, x+2, x+3...
         let theta = Line::cast_from(alpha.get::<F>() * F::cast_from(k));
